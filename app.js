@@ -29,7 +29,7 @@ function getTemplate() {
       str += chunk;
     });
     res.on('end', function(){
-      $ = cheerio.load(str);
+      $ = cheerio.load(str); // load page template into a global Cheerio object
       template = relativeToAbsolute(str);
       readPage();
     });
