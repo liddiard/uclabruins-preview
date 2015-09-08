@@ -38,7 +38,7 @@ function getTemplate() {
 
 function relativeToAbsolute(html) {
   // replace relative links in the template with absolute links
-  var relativeRegex = /^\/(?!\/)\S+$/;
+  var relativeRegex = /^\/(?!\/)\S+$/; // regex which detects relative links
   var parsedUrl = url.parse(templateUrl);
   var websiteBase = parsedUrl.protocol + "//" + parsedUrl.host;
   $('[href]').each(function(){
