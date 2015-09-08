@@ -25,4 +25,8 @@
     "chokidar": "^1.0.5",
     "yargs": "^3.24.0"
   }
+  "preferGlobal": true,
+  "bin": {
+    "uclabruins-preview": "app.js"
+  }
 }
