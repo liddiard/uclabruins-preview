@@ -1,0 +1,28 @@
+{
+  "name": "uclabruins-preview",
+  "version": "1.0.0",
+  "description": "Preview pages on uclabruins.com.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/ucla-athletics/preview.git"
+  },
+  "keywords": [
+    "preview",
+    "uclabruins.com",
+    "ucla",
+    "athletics",
+    "bruins"
+  ],
+  "author": "Harrison Liddiard <omniaura5@gmail.com> (http://harrisonliddiard.com)",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/ucla-athletics/preview#readme",
+  "dependencies": {
+    "cheerio": "^0.19.0",
+    "chokidar": "^1.0.5",
+    "yargs": "^3.24.0"
+  }
+}
