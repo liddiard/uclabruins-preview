@@ -38,6 +38,8 @@ function getTemplate() {
 
 function relativeToAbsolute(html) {
   // replace relative links in the template with absolute links
+  // this is necessary because otherwise, relative links would point to
+  // localhost, breaking most static assets
   var relativeRegex = /^\/(?!\/)\S+$/; // regex which detects relative links
   var parsedUrl = url.parse(templateUrl);
   var websiteBase = parsedUrl.protocol + "//" + parsedUrl.host;
