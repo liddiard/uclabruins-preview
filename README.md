@@ -8,7 +8,7 @@ From command line: `npm install -g uclabruins-preview`
 
 ## Usage
 
-`uclabruins-preview file-to-preview.html`
+`~$ uclabruins-preview file-to-preview.html`
 
 The preview will be served locally at the address output to the console.
 
