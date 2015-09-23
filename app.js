@@ -32,32 +32,36 @@ function getTemplate() {
     });
     res.on('end', function(){
       $ = cheerio.load(str); // load page template into a global Cheerio object
-      template = relativeToAbsolute(str);
+      template = formatLinks(str);
       readPage();
     });
   });
 }
 
-function relativeToAbsolute(html) {
+function formatLinks(html) {
   // replace relative links in the template with absolute links
   // this is necessary because otherwise, relative links would point to
   // localhost, breaking most static assets
+  // replace {{STATIC_URL}} variables with relative root ('/') 
+  var staticUrlTag = "{{STATIC_URL}}";
   var relativeRegex = /^\/(?!\/)\S+$/; // regex which detects relative links
   var parsedUrl = url.parse(templateUrl);
   var websiteBase = parsedUrl.protocol + "//" + parsedUrl.host;
   $('[href]').each(function(){
     var href = $(this).attr('href');
+    href.replace(staticUrlTag, '/');
     if (relativeRegex.test(href)) {
       href = websiteBase + href;
-      $(this).attr('href', href);
     }
+    $(this).attr('href', href);
   });
   $('[src]').each(function(){
     var src = $(this).attr('src');
+    src.replace(staticUrlTag, '/');
     if (relativeRegex.test(src)) {
       src = websiteBase + src;
-      $(this).attr('src', src);
     }
+    $(this).attr('src', src);
   });
   return $.html();
 }
