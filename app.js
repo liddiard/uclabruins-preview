@@ -32,36 +32,32 @@ function getTemplate() {
     });
     res.on('end', function(){
       $ = cheerio.load(str); // load page template into a global Cheerio object
-      template = formatLinks(str);
+      template = formatTemplate(str);
       readPage();
     });
   });
 }
 
-function formatLinks(html) {
+function formatTemplate(html) {
   // replace relative links in the template with absolute links
   // this is necessary because otherwise, relative links would point to
   // localhost, breaking most static assets
-  // replace {{STATIC_URL}} variables with relative root ('/') 
-  var staticUrlTag = /{{STATIC_URL}}/g;
   var relativeRegex = /^\/(?!\/)\S+$/; // regex which detects relative links
   var parsedUrl = url.parse(templateUrl);
   var websiteBase = parsedUrl.protocol + "//" + parsedUrl.host;
   $('[href]').each(function(){
     var href = $(this).attr('href');
-    href = href.replace(staticUrlTag, '/');
     if (relativeRegex.test(href)) {
       href = websiteBase + href;
+      $(this).attr('href', href);
     }
-    $(this).attr('href', href);
   });
   $('[src]').each(function(){
     var src = $(this).attr('src');
-    src = src.replace(staticUrlTag, '/');
     if (relativeRegex.test(src)) {
       src = websiteBase + src;
+      $(this).attr('src', src);
     }
-    $(this).attr('src', src);
   });
   return $.html();
 }
@@ -74,9 +70,15 @@ function readPage() {
       console.error(err);
       process.exit(1);
     }
-    page = data.toString();
+    page = formatPage(data.toString());
     replaceArticle();
   });
+}
+
+function formatPage(page) {
+  // replace {{STATIC_URL}} variables with relative root ('/')
+  var staticUrlRegex = /{{STATIC_URL}}/g;
+  return page.replace(staticUrlRegex, '/');
 }
 
 function replaceArticle() {
