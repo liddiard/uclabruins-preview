@@ -43,13 +43,13 @@ function formatLinks(html) {
   // this is necessary because otherwise, relative links would point to
   // localhost, breaking most static assets
   // replace {{STATIC_URL}} variables with relative root ('/') 
-  var staticUrlTag = "{{STATIC_URL}}";
+  var staticUrlTag = /{{STATIC_URL}}/g;
   var relativeRegex = /^\/(?!\/)\S+$/; // regex which detects relative links
   var parsedUrl = url.parse(templateUrl);
   var websiteBase = parsedUrl.protocol + "//" + parsedUrl.host;
   $('[href]').each(function(){
     var href = $(this).attr('href');
-    href.replace(staticUrlTag, '/');
+    href = href.replace(staticUrlTag, '/');
     if (relativeRegex.test(href)) {
       href = websiteBase + href;
     }
@@ -57,7 +57,7 @@ function formatLinks(html) {
   });
   $('[src]').each(function(){
     var src = $(this).attr('src');
-    src.replace(staticUrlTag, '/');
+    src = src.replace(staticUrlTag, '/');
     if (relativeRegex.test(src)) {
       src = websiteBase + src;
     }
