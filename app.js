@@ -3,6 +3,7 @@
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
+var path = require('path');
 var argv = require('yargs').argv;
 var chokidar = require('chokidar');
 var cheerio = require('cheerio');
@@ -41,7 +42,7 @@ function getTemplate() {
 function formatTemplate(html) {
   // remove the <base> tag which tells all relative links to be relative
   // to uclabruins.com
-  $('base').remove(); 
+  $('base').remove();
   // replace relative links in the template with absolute links
   // this is necessary because otherwise, relative links would point to
   // localhost, breaking most static assets
@@ -97,8 +98,34 @@ function servePreview(html) {
   // start the preview server locally
   console.log('serving preview of ' + pageFile + ' at http://localhost:' + port);
   server = http.createServer(function(req, res){
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(html);
+    var uri = url.parse(req.url).pathname;
+    var filename = path.join(process.cwd(), uri);
+    if (uri === '/') {
+      res.writeHead(200, {'Content-Type': 'text/html'});
+      res.end(html);
+    }
+    else {
+      fs.exists(filename, function(exists) {
+        if (!exists) {
+          res.writeHead(404, {"Content-Type": "text/plain"});
+          res.write("404 Not Found\n");
+          res.end();
+        }
+        else {
+          fs.readFile(filename, "binary", function(err, file) {
+            if(err) {
+              res.writeHead(500, {"Content-Type": "text/plain"});
+              res.write(err + "\n");
+              res.end();
+            }
+
+            res.writeHead(200);
+            res.write(file, "binary");
+            res.end();
+          });
+        }
+      });
+    }
      // don't allow client to keep the connection open which prevents server
      // from restarting
     req.connection.destroy();
