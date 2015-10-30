@@ -39,6 +39,9 @@ function getTemplate() {
 }
 
 function formatTemplate(html) {
+  // remove the <base> tag which tells all relative links to be relative
+  // to uclabruins.com
+  $('base').remove(); 
   // replace relative links in the template with absolute links
   // this is necessary because otherwise, relative links would point to
   // localhost, breaking most static assets
