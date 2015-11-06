@@ -113,7 +113,7 @@ function servePreview(html) {
         }
         else {
           fs.readFile(filename, "binary", function(err, file) {
-            if(err) {
+            if (err) {
               res.writeHead(500, {"Content-Type": "text/plain"});
               res.write(err + "\n");
               res.end();
@@ -128,7 +128,7 @@ function servePreview(html) {
     }
      // don't allow client to keep the connection open which prevents server
      // from restarting
-    req.connection.destroy();
+    //req.connection.destroy();
   }).listen(port, 'localhost');
 }
 
