@@ -83,8 +83,8 @@ function replaceArticle() {
   // replace the article content of the template with the content of the local
   // HTML page
   console.log('replacing article...');
-  $('#article-content').empty();
-  $('#article-content').append(page);
+  $('.article-content').empty();
+  $('.article-content').append(page);
   servePreview($.html());
 }
 
