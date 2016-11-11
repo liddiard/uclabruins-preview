@@ -120,9 +120,9 @@ function servePreview(html) {
         }
       });
     }
-     // don't allow client to keep the connection open which prevents server
-     // from restarting
-    //req.connection.destroy();
+    // don't allow client to keep the connection open which prevents server
+    // from restarting
+    req.connection.destroy();
   }).listen(port, 'localhost');
 }
 
