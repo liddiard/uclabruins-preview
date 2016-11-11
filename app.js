@@ -1,22 +1,25 @@
 #! /usr/bin/env node
 
-var http = require('http');
-var fs = require('fs');
-var url = require('url');
-var path = require('path');
-var argv = require('yargs').argv;
-var chokidar = require('chokidar');
-var cheerio = require('cheerio');
+const http = require('http');
+const fs = require('fs');
+const url = require('url');
+const path = require('path');
+const argv = require('yargs').argv;
 
-var DEFAULT_TEMPLATE = "http://uclabruins.com/ViewArticle.dbml?ATCLID=209624560&DB_OEM_ID=30500";
-var DEFAULT_PORT = 3001;
+const chokidar = require('chokidar');
+const cheerio = require('cheerio');
+const request = require('superagent');
 
-var templateUrl = argv.template || DEFAULT_TEMPLATE;
-var port = argv.port || DEFAULT_PORT;
-var pageFile = argv._[0];
-var server;
-var template;
-var page;
+const DEFAULT_TEMPLATE = "http://www.uclabruins.com/sports/2015/10/21/210437289.aspx";
+const DEFAULT_PORT = 3001;
+
+const templateUrl = argv.template || DEFAULT_TEMPLATE;
+const port = argv.port || DEFAULT_PORT;
+const pageFile = argv._[0];
+
+let server;
+let template;
+let page;
 
 if (!pageFile) {
   console.error('ERROR: No page specified to preview.');
@@ -81,7 +84,7 @@ function readPage() {
 
 function formatPage(page) {
   // replace {{STATIC_URL}} variables with relative root ('/')
-  var staticUrlRegex = /{{STATIC_URL}}/g;
+  const staticUrlRegex = /{{STATIC_URL}}/g;
   return page.replace(staticUrlRegex, '/');
 }
 
@@ -98,8 +101,8 @@ function servePreview(html) {
   // start the preview server locally
   console.log('serving preview of ' + pageFile + ' at http://localhost:' + port);
   server = http.createServer(function(req, res){
-    var uri = url.parse(req.url).pathname;
-    var filename = path.join(process.cwd(), uri);
+    const uri = url.parse(req.url).pathname;
+    const filename = path.join(process.cwd(), uri);
     if (uri === '/') {
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(html);
