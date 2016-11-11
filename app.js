@@ -40,28 +40,22 @@ function getTemplate() {
 }
 
 function formatTemplate(html) {
-  // remove the <base> tag which tells all relative links to be relative
+  // append the <base> tag which tells all relative links to be relative
   // to uclabruins.com
-  $('base').remove();
+  $('head').prepend('<base href="http://www.uclabruins.com/" />');
   // replace relative links in the template with absolute links
   // this is necessary because otherwise, relative links would point to
   // localhost, breaking most static assets
-  var relativeRegex = /^\/(?!\/)\S+$/; // regex which detects relative links
-  var parsedUrl = url.parse(templateUrl);
-  var websiteBase = parsedUrl.protocol + "//" + parsedUrl.host;
+  const re = /^\/(?!\/)/; // links that begin with a single slash 
   $('[href]').each(function(){
-    var href = $(this).attr('href');
-    if (relativeRegex.test(href)) {
-      href = websiteBase + href;
-      $(this).attr('href', href);
-    }
+    const href = $(this).attr('href');
+    if (re.test(href)) 
+      $(this).attr('href', href.substr(1));
   });
   $('[src]').each(function(){
-    var src = $(this).attr('src');
-    if (relativeRegex.test(src)) {
-      src = websiteBase + src;
-      $(this).attr('src', src);
-    }
+    const src = $(this).attr('src');
+    if (re.test(src)) 
+      $(this).attr('src', src.substr(1));
   });
   return $.html();
 }
