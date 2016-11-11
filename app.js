@@ -29,16 +29,13 @@ if (!pageFile) {
 function getTemplate() {
   // get the base page template from a remote server
   console.log('getting template...');
-  var str = "";
-  http.get(templateUrl, function(res){
-    res.on('data', function(chunk){
-      str += chunk;
-    });
-    res.on('end', function(){
-      $ = cheerio.load(str); // load page template into a global Cheerio object
-      template = formatTemplate(str);
-      readPage();
-    });
+  request
+  .get(templateUrl)
+  .end((err, res) => {
+    // load page template into a global Cheerio object
+    $ = cheerio.load(res.text);
+    template = formatTemplate(res.text);
+    readPage();
   });
 }
 
