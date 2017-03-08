@@ -91,7 +91,7 @@ function replaceArticle() {
 function servePreview(html) {
   // start the preview server locally
   console.log('serving preview of ' + pageFile + ' at http://localhost:' + port);
-  server = http.createServer(function(req, res){
+  server = http.createServer((req, res) => {
     const uri = url.parse(req.url).pathname;
     const filename = path.join(process.cwd(), uri);
     if (uri === '/') {
@@ -99,14 +99,14 @@ function servePreview(html) {
       res.end(html);
     }
     else {
-      fs.exists(filename, function(exists) {
+      fs.exists(filename, exists => {
         if (!exists) {
           res.writeHead(404, {"Content-Type": "text/plain"});
           res.write("404 Not Found\n");
           res.end();
         }
         else {
-          fs.readFile(filename, "binary", function(err, file) {
+          fs.readFile(filename, "binary", (err, file) => {
             if (err) {
               res.writeHead(500, {"Content-Type": "text/plain"});
               res.write(err + "\n");
@@ -128,10 +128,10 @@ function servePreview(html) {
 
 getTemplate(); // generate template initially
 
-chokidar.watch(pageFile).on('change', function(){
+chokidar.watch(pageFile).on('change', () => {
   // listen for changes to the page file. if it changes, stop and restart the server.
-  var date = new Date();
-  var formattedTime = [date.getHours(), date.getMinutes(), date.getSeconds()].join(':');
+  const date = new Date();
+  const formattedTime = [date.getHours(), date.getMinutes(), date.getSeconds()].join(':');
   console.log('[' + formattedTime + '] ' + 'detected change, reloading...');
   server.close(readPage); // invoke readPage as a callback once server is closed
 });
