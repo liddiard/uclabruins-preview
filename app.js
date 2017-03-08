@@ -122,7 +122,7 @@ function servePreview(html) {
     }
     // don't allow client to keep the connection open which prevents server
     // from restarting
-    req.connection.destroy();
+    setTimeout(() => { req.connection.destroy() }, 10*1000);
   }).listen(port, 'localhost');
 }
 
