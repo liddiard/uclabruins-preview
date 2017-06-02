@@ -1,6 +1,6 @@
 {
   "name": "uclabruins-preview",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Preview pages on uclabruins.com.",
   "main": "app.js",
   "scripts": {
